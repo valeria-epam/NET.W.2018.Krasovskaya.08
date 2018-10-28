@@ -4,11 +4,17 @@ using System.Linq;
 
 namespace Bank
 {
+    /// <summary>
+    /// Class for storing account information.
+    /// </summary>
     public class AccountStorage : IAccountStorage
     {
         private IList<BankAccount> _accounts;
         private readonly string _path;
 
+        /// <summary>
+        /// Initializes a new instanse of <see cref="AccountStorage"/>. 
+        /// </summary>
         public AccountStorage(string path)
         {
             _path = path;
@@ -27,62 +33,58 @@ namespace Bank
             }
         }
 
-        public bool ExistAccount(BankAccount account)
+        /// <summary>
+        /// Checks if the account exists.
+        /// </summary>
+        public bool AccountExists(BankAccount account)
         {
             return Accounts.Contains(account);
         }
 
+        /// <summary>
+        /// Adds the account to the storage.
+        /// </summary>
         public void AddAccount(BankAccount account)
         {
             Accounts.Add(account);
         }
 
+        /// <summary>
+        /// Delete the account with the specified <paramref name="number"/> from the storage.
+        /// </summary>
         public void DeleteAccount(string number)
         {
             Accounts.Remove(_accounts.First(t => t.Number == number));
         }
 
+        /// <summary>
+        /// Gets the account with the specified <paramref name="number"/>.
+        /// </summary>
         public BankAccount GetAccount(string number)
         {
             return Accounts.FirstOrDefault(t => t.Number == number);
         }
 
+        /// <summary>
+        /// Gets all accounts.
+        /// </summary>
         public IEnumerable<BankAccount> GetAccounts()
         {
             return Accounts;
         }
 
+        /// <summary>
+        /// Saves the accounts to the storage.
+        /// </summary>
         public void Save()
         {
             WriteAccounts(Accounts);
         }
 
-        private void WriteAccounts(IEnumerable<BankAccount> bankAccounts)
-        {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(_path, FileMode.Create)))
-            {
-                foreach (var account in bankAccounts)
-                {
-                    WriteAccount(account, writer);
-                }
-            }
-        }
-
-        private static void WriteAccount(BankAccount account, BinaryWriter writer)
-        {
-            writer.Write(account.Number);
-            writer.Write(account.Owner.Name);
-            writer.Write(account.Owner.Surname);
-            writer.Write(account.Sum);
-            writer.Write(account.Bonus);
-            writer.Write(account.AccountType.TypeName);
-            writer.Write(account.AccountType.BalanceCost);
-            writer.Write(account.AccountType.RefillCost);
-            writer.Write((int)account.State);
-
-        }
-
-        private void LoadAccounts()
+        /// <summary>
+        /// Loads the accounts from the file.
+        /// </summary>
+        public void LoadAccounts()
         {
             using (BinaryReader reader = new BinaryReader(File.Open(_path, FileMode.OpenOrCreate)))
             {
@@ -124,6 +126,30 @@ namespace Bank
             }
         }
 
+        private void WriteAccounts(IEnumerable<BankAccount> bankAccounts)
+        {
+            using (BinaryWriter writer = new BinaryWriter(File.Open(_path, FileMode.Create)))
+            {
+                foreach (var account in bankAccounts)
+                {
+                    WriteAccount(account, writer);
+                }
+            }
+        }
+
+        private static void WriteAccount(BankAccount account, BinaryWriter writer)
+        {
+            writer.Write(account.Number);
+            writer.Write(account.Owner.Name);
+            writer.Write(account.Owner.Surname);
+            writer.Write(account.Sum);
+            writer.Write(account.Bonus);
+            writer.Write(account.AccountType.TypeName);
+            writer.Write(account.AccountType.BalanceCost);
+            writer.Write(account.AccountType.RefillCost);
+            writer.Write((int)account.State);
+
+        }
 
     }
 }

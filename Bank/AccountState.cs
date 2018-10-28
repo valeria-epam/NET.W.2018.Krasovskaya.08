@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Bank
 {
+    /// <summary>
+    /// Represents account state.
+    /// </summary>
     public enum AccountState
     {
         Active,
-        Close
+        Closed
     }
 }

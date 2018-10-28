@@ -1,29 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bank
 {
+    /// <summary>
+    /// Class for managing account information.
+    /// </summary>
     public class AccountManager : IAccountManager
     {
-        private ICalculateBonus calculateBonus;
-        private IAccountStorage storage;
+        private readonly ICalculateBonus _calculateBonus;
+        private readonly IAccountStorage _storage;
 
+        /// <summary>
+        /// Initializes a new instanse of <see cref="AccountManager"/>. 
+        /// </summary>
         public AccountManager(ICalculateBonus calculateBonus, IAccountStorage storage)
         {
-            this.calculateBonus = calculateBonus;
-            this.storage = storage;
+            _calculateBonus = calculateBonus;
+            _storage = storage;
         }
 
+        /// <summary>
+        /// Adds a new account if it doesn't exist.
+        /// </summary>
         public void AddBankAccount(BankAccount account)
         {
             CheckAccount(account);
-            bool hasAccount = storage.ExistAccount(account);
+            bool hasAccount = _storage.AccountExists(account);
             if (!hasAccount)
             {
-                storage.AddAccount(account);
+                _storage.AddAccount(account);
             }
             else
             {
@@ -32,64 +38,100 @@ namespace Bank
 
         }
 
+        /// <summary>
+        /// Close account if it exists.
+        /// </summary>
         public void CloseBankAccount(BankAccount account)
         {
             CheckAccount(account);
-            var bankAccount = storage.GetAccount(account.Number);
+            var bankAccount = _storage.GetAccount(account.Number);
             if (bankAccount != null)
             {
-                bankAccount.State = AccountState.Close;
+                bankAccount.State = AccountState.Closed;
             }
             else
+            {
                 throw new Exception("Our storage doesn't have this account.");
+            }
         }
 
+        /// <summary>
+        /// Adds amount of money to the account.
+        /// </summary>
         public void RefillAccount(BankAccount account, decimal amountOfMoney)
         {
-            CheckAccount(account);
-            var bankAccount = storage.GetAccount(account.Number);
-
-            if (bankAccount != null)
+            if (amountOfMoney <= 0)
             {
-                bankAccount.Sum += amountOfMoney;
-                calculateBonus.RefillBonus(bankAccount, amountOfMoney);
+                throw new ArgumentOutOfRangeException(nameof(amountOfMoney));
             }
-            else
+            CheckAccount(account);
+
+            var bankAccount = _storage.GetAccount(account.Number);
+            if (bankAccount == null)
             {
                 throw new Exception("Our storage doesn't have this account.");
-
             }
-
+            if (bankAccount.State == AccountState.Closed)
+            {
+                throw new Exception("Your account is closed.");
+            }
+            bankAccount.Sum += amountOfMoney;
+            _calculateBonus.RefillBonus(bankAccount, amountOfMoney);
         }
 
+        /// <summary>
+        /// Withdraws amount of money from account.
+        /// </summary>
         public void WithdrawalAccount(BankAccount account, decimal amountOfMoney)
         {
+            if (amountOfMoney <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(amountOfMoney));
+            }
             CheckAccount(account);
 
-            var bankAccount = storage.GetAccount(account.Number);
-            if (bankAccount != null)
-            {
-                bankAccount.Sum -= amountOfMoney;
-                calculateBonus.WithdrawalBonus(bankAccount, amountOfMoney);
-            }
-            else
+            var bankAccount = _storage.GetAccount(account.Number);
+            if (bankAccount == null)
             {
                 throw new Exception("Our storage doesn't have this account.");
-
             }
+            if (bankAccount.State == AccountState.Closed)
+            {
+                throw new Exception("Your account is closed.");
+            }
+            if (bankAccount.Sum < amountOfMoney)
+            {
+                throw new Exception("You don't have enough money on your account.");
+            }
+            bankAccount.Sum -= amountOfMoney;
+            _calculateBonus.WithdrawalBonus(bankAccount, amountOfMoney);
         }
 
+        /// <summary>
+        /// Gets account by account <paramref name="number"/>.
+        /// </summary>
         public BankAccount GetAccount(string number)
         {
-            return storage.GetAccount(number);
+            return _storage.GetAccount(number);
         }
 
+        /// <summary>
+        /// Gets all accounts.
+        /// </summary>
         public IEnumerable<BankAccount> GetAccounts()
         {
-            return storage.GetAccounts();
+            return _storage.GetAccounts();
         }
 
-        public void Save() => storage.Save();
+        /// <summary>
+        /// Saves the accounts to the storage.
+        /// </summary>
+        public void Save() => _storage.Save();
+
+        /// <summary>
+        /// Reloads the accounts to the storage.
+        /// </summary>
+        public void Reload() => _storage.LoadAccounts();
 
         private static void CheckAccount(BankAccount account)
         {

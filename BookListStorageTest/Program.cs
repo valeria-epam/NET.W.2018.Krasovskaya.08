@@ -13,6 +13,7 @@ namespace BookListStorageTest
     {
         static void Main(string[] args)
         {
+            #region Initialize
             var book1 = new Book()
             {
                 Author = "Джеффри Рихтер",
@@ -38,16 +39,18 @@ namespace BookListStorageTest
             var appFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var storageFolder = Path.Combine(appFolder, "Storage");
             Directory.CreateDirectory(storageFolder);
-            var service = new BookListService(Path.Combine(storageFolder, "BookListStorage"));
+            var path = Path.Combine(storageFolder, "BookListStorage");
+            var service = new BookListService(path);
+            #endregion
+
             service.AddBook(book1);
             service.AddBook(book2);
-
             foreach (var book in service.GetBooks())
             {
                 Console.WriteLine(book.ToString());
             }
-
             Console.ReadKey();
+            Console.WriteLine();
 
             service.RemoveBook(book2);
 
@@ -55,9 +58,9 @@ namespace BookListStorageTest
             var book3 = service.FindBookByTag(criterion);
             Console.WriteLine(book3.ToString());
             Console.ReadKey();
+            Console.WriteLine();
 
             service.AddBook(book2);
-
             var books = service.SortBooksByTag(Comparer<Book>.Default);
             foreach (var book in books)
             {
@@ -65,8 +68,10 @@ namespace BookListStorageTest
             }
 
             Console.ReadKey();
+            File.Delete(path);
         }
 
+        #region Nested class
         class NameCriterion : ICriterion
         {
             public NameCriterion(string name)
@@ -80,5 +85,7 @@ namespace BookListStorageTest
                 return book?.Name == _name;
             }
         }
+        #endregion
+
     }
 }

@@ -7,18 +7,26 @@ using System.Threading.Tasks;
 
 namespace BookListStorage
 {
+    /// <summary>
+    /// Class for managing book information.
+    /// </summary>
     public class BookListService
     {
         private IList<Book> _booksList;
 
         private readonly string _path;
 
+        /// <summary>
+        /// Initializes a new instanse of <see cref="BookListService"/>. 
+        /// </summary>
         public BookListService(string path)
         {
             _path = path;
         }
 
-       
+        /// <summary>
+        /// Adds a new book if it doesn't exist.
+        /// </summary>
         public void AddBook(Book book)
         {
             if (_booksList == null)
@@ -35,6 +43,9 @@ namespace BookListStorage
             _booksList.Add(book);
         }
 
+        /// <summary>
+        /// Remove book if it exists.
+        /// </summary>
         public void RemoveBook(Book book)
         {
             if (_booksList == null)
@@ -67,6 +78,9 @@ namespace BookListStorage
             throw new Exception("We don't have this book, so you cannot remove it.");
         }
 
+        /// <summary>
+        /// Find the book by the specified <paramref name="criterion"/>.
+        /// </summary>
         public Book FindBookByTag(ICriterion criterion)
         {
             if (_booksList == null)
@@ -85,6 +99,11 @@ namespace BookListStorage
             return null;
         }
 
+        /// <summary>
+        /// Returns the list of books, sorted with the specified <paramref name="comparer"/>.
+        /// </summary>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
         public IEnumerable<Book> SortBooksByTag(IComparer<Book> comparer)
         {
             if (_booksList == null)
@@ -95,6 +114,10 @@ namespace BookListStorage
             return _booksList.OrderBy(x => x, comparer);
         }
 
+        /// <summary>
+        /// Gets all books.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Book> GetBooks()
         {
             if (_booksList == null)

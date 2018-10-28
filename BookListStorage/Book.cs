@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace BookListStorage
 {
+    /// <summary>
+    /// Represents a book.
+    /// </summary>
     public class Book : IEquatable<Book>, IComparable<Book>
     {
         public string ISBN { get; set; }
@@ -16,6 +19,8 @@ namespace BookListStorage
         public int NumberOfPages { get; set; }
         public decimal Price { get; set; }
 
+
+        /// <inheritdoc />
         public bool Equals(Book other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -25,6 +30,7 @@ namespace BookListStorage
                    && Year == other.Year && NumberOfPages == other.NumberOfPages && Price == other.Price;
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -33,6 +39,7 @@ namespace BookListStorage
             return Equals((Book)obj);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
@@ -58,6 +65,7 @@ namespace BookListStorage
             return !Equals(left, right);
         }
 
+        /// <inheritdoc />
         public int CompareTo(Book other)
         {
             if (ReferenceEquals(this, other)) return 0;
@@ -65,6 +73,7 @@ namespace BookListStorage
             return string.Compare(Name, other.Name, StringComparison.Ordinal);
         }
 
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"{nameof(ISBN)}: {ISBN}, {nameof(Author)}: {Author}, " +
