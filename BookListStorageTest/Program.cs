@@ -28,7 +28,7 @@ namespace BookListStorageTest
             var book2 = new Book()
             {
                 Author = "Панос Луридас",
-                Name = "Алгоритмы для начинающих",
+                Name = "Aлгоритмы для начинающих",
                 NumberOfPages = 608,
                 PublishingOffice = "Эксмо",
                 Year = 2018,
@@ -40,7 +40,9 @@ namespace BookListStorageTest
             var storageFolder = Path.Combine(appFolder, "Storage");
             Directory.CreateDirectory(storageFolder);
             var path = Path.Combine(storageFolder, "BookListStorage");
-            var service = new BookListService(path);
+
+            var storage = new BookStorage(path);
+            var service = new BookListService(storage);
             #endregion
 
             service.AddBook(book1);

@@ -79,7 +79,7 @@ namespace BookListStorage
             return $"{nameof(ISBN)}: {ISBN}, {nameof(Author)}: {Author}, " +
                    $"{nameof(Name)}: {Name}, {nameof(PublishingOffice)}: {PublishingOffice}," +
                    $" {nameof(Year)}: {Year}, {nameof(NumberOfPages)}: {NumberOfPages}," +
-                   $" {nameof(Price)}: {Price}";
+                   $" {nameof(Price)}: {Price:C}";
         }
     }
 }
