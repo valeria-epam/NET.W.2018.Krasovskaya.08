@@ -9,11 +9,11 @@ namespace Bank
     /// </summary>
     public class AccountStorage : IAccountStorage
     {
-        private IList<BankAccount> _accounts;
         private readonly string _path;
+        private IList<BankAccount> _accounts;
 
         /// <summary>
-        /// Initializes a new instanse of <see cref="AccountStorage"/>. 
+        /// Initializes a new instance of <see cref="AccountStorage"/>. 
         /// </summary>
         public AccountStorage(string path)
         {
@@ -126,17 +126,6 @@ namespace Bank
             }
         }
 
-        private void WriteAccounts(IEnumerable<BankAccount> bankAccounts)
-        {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(_path, FileMode.Create)))
-            {
-                foreach (var account in bankAccounts)
-                {
-                    WriteAccount(account, writer);
-                }
-            }
-        }
-
         private static void WriteAccount(BankAccount account, BinaryWriter writer)
         {
             writer.Write(account.Number);
@@ -148,8 +137,17 @@ namespace Bank
             writer.Write(account.AccountType.BalanceCost);
             writer.Write(account.AccountType.RefillCost);
             writer.Write((int)account.State);
-
         }
 
+        private void WriteAccounts(IEnumerable<BankAccount> bankAccounts)
+        {
+            using (BinaryWriter writer = new BinaryWriter(File.Open(_path, FileMode.Create)))
+            {
+                foreach (var account in bankAccounts)
+                {
+                    WriteAccount(account, writer);
+                }
+            }
+        }
     }
 }

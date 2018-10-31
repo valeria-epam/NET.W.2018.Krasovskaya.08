@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookListStorage
 {
@@ -12,7 +8,7 @@ namespace BookListStorage
         private readonly string _path;
 
         /// <summary>
-        /// Initializes a new instanse of <see cref="BookStorage"/>. 
+        /// Initializes a new instance of <see cref="BookStorage"/>. 
         /// </summary>
         public BookStorage(string path)
         {
@@ -76,9 +72,10 @@ namespace BookListStorage
                     books.Add(book);
                 }
             }
+
             return books;
         }
-        
+
         private static void WriteBook(Book book, BinaryWriter writer)
         {
             writer.Write(book.ISBN);
@@ -91,4 +88,3 @@ namespace BookListStorage
         }
     }
 }
-

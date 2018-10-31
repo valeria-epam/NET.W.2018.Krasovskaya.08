@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Bank;
 
 namespace BankTest
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+       public static void Main(string[] args)
         {
-            #region Initialization
             var owner = new AccountOwner()
             {
                 Name = "Ivan",
@@ -52,7 +47,6 @@ namespace BankTest
 
             var storage = new AccountStorage(path);
             var manager = new AccountManager(calculateBonus, storage);
-            #endregion
 
             manager.AddBankAccount(account1);
             manager.AddBankAccount(account2);
@@ -112,6 +106,7 @@ namespace BankTest
             {
                 Console.WriteLine(bankAccount.ToString());
             }
+
             Console.ReadKey();
             File.Delete(path);
         }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookListStorage
 {
@@ -12,11 +9,11 @@ namespace BookListStorage
     /// </summary>
     public class BookListService
     {
-        private IList<Book> _booksList;
         private readonly IBookStorage _storage;
+        private IList<Book> _booksList;
 
         /// <summary>
-        /// Initializes a new instanse of <see cref="BookListService"/>. 
+        /// Initializes a new instance of <see cref="BookListService"/>. 
         /// </summary>
         public BookListService(IBookStorage storage)
         {
@@ -32,10 +29,13 @@ namespace BookListStorage
             {
                 _booksList = _storage.LoadBooks();
             }
+
             bool hasBook = _booksList.Any(item => book == item);
 
             if (hasBook)
+            {
                 throw new Exception("Our book storage already had this book.");
+            }
 
             _storage.AppendBook(book);
             _booksList.Add(book);
@@ -50,6 +50,7 @@ namespace BookListStorage
             {
                 _booksList = _storage.LoadBooks();
             }
+
             if (_booksList.Count > 0)
             {
                 bool hasBook = false;
@@ -62,6 +63,7 @@ namespace BookListStorage
                         break;
                     }
                 }
+
                 if (hasBook)
                 {
                     _booksList.RemoveAt(position);
@@ -69,6 +71,7 @@ namespace BookListStorage
                     return;
                 }
             }
+
             throw new Exception("We don't have this book, so you cannot remove it.");
         }
 
@@ -89,6 +92,7 @@ namespace BookListStorage
                     return book;
                 }
             }
+
             return null;
         }
 
@@ -117,6 +121,7 @@ namespace BookListStorage
             {
                 _booksList = _storage.LoadBooks();
             }
+
             return _booksList;
         }
     }

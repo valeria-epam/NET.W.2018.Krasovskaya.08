@@ -1,5 +1,4 @@
-﻿
-namespace Bank
+﻿namespace Bank
 {
     /// <summary>
     /// Represents account state.

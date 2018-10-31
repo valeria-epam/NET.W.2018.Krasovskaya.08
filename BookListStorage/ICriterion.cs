@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BookListStorage
+﻿namespace BookListStorage
 {
     /// <summary>
     /// Represents a criterion which a book can match.

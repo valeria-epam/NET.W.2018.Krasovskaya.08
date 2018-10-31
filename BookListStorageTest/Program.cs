@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using BookListStorage;
 
 namespace BookListStorageTest
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            #region Initialize
             var book1 = new Book()
             {
                 Author = "Джеффри Рихтер",
@@ -43,14 +39,15 @@ namespace BookListStorageTest
 
             var storage = new BookStorage(path);
             var service = new BookListService(storage);
-            #endregion
 
             service.AddBook(book1);
             service.AddBook(book2);
+
             foreach (var book in service.GetBooks())
             {
                 Console.WriteLine(book.ToString());
             }
+
             Console.ReadKey();
             Console.WriteLine();
 
@@ -74,20 +71,20 @@ namespace BookListStorageTest
         }
 
         #region Nested class
-        class NameCriterion : ICriterion
+        private class NameCriterion : ICriterion
         {
+            private readonly string _name;
+
             public NameCriterion(string name)
             {
                 _name = name;
             }
 
-            private readonly string _name;
             public bool IsMatch(Book book)
             {
                 return book?.Name == _name;
             }
         }
         #endregion
-
     }
 }

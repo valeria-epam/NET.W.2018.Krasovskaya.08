@@ -12,7 +12,7 @@ namespace Bank
         private readonly IAccountStorage _storage;
 
         /// <summary>
-        /// Initializes a new instanse of <see cref="AccountManager"/>. 
+        /// Initializes a new instance of <see cref="AccountManager"/>. 
         /// </summary>
         public AccountManager(ICalculateBonus calculateBonus, IAccountStorage storage)
         {
@@ -35,7 +35,6 @@ namespace Bank
             {
                 throw new Exception("Our storage already has this account.");
             }
-
         }
 
         /// <summary>
@@ -64,6 +63,7 @@ namespace Bank
             {
                 throw new ArgumentOutOfRangeException(nameof(amountOfMoney));
             }
+
             CheckAccount(account);
 
             var bankAccount = _storage.GetAccount(account.Number);
@@ -71,10 +71,12 @@ namespace Bank
             {
                 throw new Exception("Our storage doesn't have this account.");
             }
+
             if (bankAccount.State == AccountState.Closed)
             {
                 throw new Exception("Your account is closed.");
             }
+
             bankAccount.Sum += amountOfMoney;
             _calculateBonus.RefillBonus(bankAccount, amountOfMoney);
         }
@@ -88,6 +90,7 @@ namespace Bank
             {
                 throw new ArgumentOutOfRangeException(nameof(amountOfMoney));
             }
+
             CheckAccount(account);
 
             var bankAccount = _storage.GetAccount(account.Number);
@@ -95,14 +98,17 @@ namespace Bank
             {
                 throw new Exception("Our storage doesn't have this account.");
             }
+
             if (bankAccount.State == AccountState.Closed)
             {
                 throw new Exception("Your account is closed.");
             }
+
             if (bankAccount.Sum < amountOfMoney)
             {
                 throw new Exception("You don't have enough money on your account.");
             }
+
             bankAccount.Sum -= amountOfMoney;
             _calculateBonus.WithdrawalBonus(bankAccount, amountOfMoney);
         }
@@ -146,14 +152,17 @@ namespace Bank
         private static void CheckNotNull(object value, string property)
         {
             if (ReferenceEquals(value, null))
+            {
                 throw new Exception($"The property {property} cannot be null.");
+            }
         }
 
         private static void Check(string value, string property)
         {
             if (string.IsNullOrWhiteSpace(value))
+            {
                 throw new Exception($"The property {property} cannot be null or empty.");
-
+            }
         }
     }
 }

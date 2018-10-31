@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bank
+﻿namespace Bank
 {
     /// <summary>
-    /// Represets logic for calculation of bonuses.
+    /// Represents logic for calculation of bonuses.
     /// </summary>
     public class CalculateBonus : ICalculateBonus
     {
@@ -26,7 +20,7 @@ namespace Bank
         {
             account.Bonus -= amountOfMoney * account.AccountType.BalanceCost / 100;
 
-            if (account.Bonus<0)
+            if (account.Bonus < 0)
             {
                 account.Bonus = 0m;
             }
