@@ -7,7 +7,7 @@ namespace BookListStorage
     /// <summary>
     /// Represents a book.
     /// </summary>
-    public class Book : IEquatable<Book>, IComparable<Book>
+    public class Book : IEquatable<Book>, IComparable<Book>, IFormattable
     {
         private static readonly char[] SimpleFormats = new[] { 'N', 'Y', 'H', 'I', 'P', 'A' };
 
