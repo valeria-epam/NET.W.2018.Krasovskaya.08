@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Common.Logging;
 
 namespace BookListStorage
 {
     public class BookStorage : IBookStorage
     {
+        private static readonly ILog Log = LogManager.GetLogger<BookStorage>();
         private readonly string _path;
 
         /// <summary>
@@ -73,6 +75,7 @@ namespace BookListStorage
                 }
             }
 
+            Log.Debug("Books were loaded from file.");
             return books;
         }
 
@@ -85,6 +88,8 @@ namespace BookListStorage
             writer.Write(book.Year);
             writer.Write(book.NumberOfPages);
             writer.Write(book.Price);
+
+            Log.Debug("Books were written to file.");
         }
     }
 }

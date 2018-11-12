@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Logging;
 
 namespace BookListStorage
 {
@@ -9,6 +10,7 @@ namespace BookListStorage
     /// </summary>
     public class BookListService
     {
+        private static readonly ILog Log = LogManager.GetLogger<BookListService>();
         private readonly IBookStorage _storage;
         private IList<Book> _booksList;
 
@@ -28,16 +30,20 @@ namespace BookListStorage
             if (_booksList == null)
             {
                 _booksList = _storage.LoadBooks();
+                Log.Debug("Book service load books.");
             }
 
             bool hasBook = _booksList.Any(item => book == item);
 
             if (hasBook)
             {
+                Log.Error($"Book storage already had this {book} book.");
                 throw new Exception("Our book storage already had this book.");
             }
 
             _storage.AppendBook(book);
+            Log.Info($"{book} added in the book storage");
+
             _booksList.Add(book);
         }
 
@@ -49,6 +55,7 @@ namespace BookListStorage
             if (_booksList == null)
             {
                 _booksList = _storage.LoadBooks();
+                Log.Debug("Book service load books.");
             }
 
             if (_booksList.Count > 0)
@@ -67,11 +74,15 @@ namespace BookListStorage
                 if (hasBook)
                 {
                     _booksList.RemoveAt(position);
+                    Log.Info($"{book} removed from the book storage");
+
                     _storage.WriteBooks(_booksList);
+                    Log.Debug("Book service rewrite books.");
                     return;
                 }
             }
 
+            Log.Error($"Book storage has'n this {book} book.");
             throw new Exception("We don't have this book, so you cannot remove it.");
         }
 
@@ -83,6 +94,7 @@ namespace BookListStorage
             if (_booksList == null)
             {
                 _booksList = _storage.LoadBooks();
+                Log.Debug("Book service load books.");
             }
 
             foreach (var book in _booksList)
@@ -106,6 +118,7 @@ namespace BookListStorage
             if (_booksList == null)
             {
                 _booksList = _storage.LoadBooks();
+                Log.Debug("Book service load books.");
             }
 
             return _booksList.OrderBy(x => x, comparer);
@@ -120,6 +133,7 @@ namespace BookListStorage
             if (_booksList == null)
             {
                 _booksList = _storage.LoadBooks();
+                Log.Debug("Book service load books.");
             }
 
             return _booksList;
